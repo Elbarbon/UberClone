@@ -5,6 +5,8 @@ import { Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { selectTravelTimeInformation } from '../slices/navSlice';
+import "intl";
+import "intl/locale-data/jsonp/en";
 
 const data = [
     {
@@ -26,6 +28,8 @@ const data = [
         image: "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_858,h_483/f_auto,q_auto/products/carousel/Black.png"
     }
 ];
+
+const SURGE_CHARGE_RATE = 10.5;
 
 const RideOptionsCard = () => {
     const navigator = useNavigation();
@@ -65,7 +69,15 @@ const RideOptionsCard = () => {
                             <Text style={tw`text-xl font-semibold`}>{title}</Text>
                             <Text>tiempo de viaje {travelTimeInformation?.duration.text}</Text>
                         </View>
-                        <Text style={tw`text-xl`}>$1.000</Text>
+                        <Text style={tw`text-xl`}>
+                            {new Intl.NumberFormat('es-es', {
+                                style: 'currency',
+                                currency: 'CLP',
+
+                            }).format(
+                                (travelTimeInformation?.duration.value * SURGE_CHARGE_RATE * multiplier) 
+                            )}
+                        </Text>
                     </TouchableOpacity>
                 )}
             />  
